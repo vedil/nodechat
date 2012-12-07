@@ -1,0 +1,3 @@
+this is problem statement
+
+Create a multi user chat server that users can telnet into. e.g. 192.168.2.25.8000 (similar to IRC). Bonus if you can make it P2P.
