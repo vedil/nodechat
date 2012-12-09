@@ -12,7 +12,12 @@ function receiveData(socket, data) {
 	
 	if(dataToCompare.lastIndexOf("@PM") == 0)
 	{
-		console.log("handle private message");
+		//assuming that the message will be sent as @PM userId:this is test message
+		var seperatorIndex = dataToCompare.indexOf(':');
+		var userId = dataToCompare.substring(4, seperatorIndex);
+		console.log("handle private message userId "+userId);
+		users[userId].write("user "+userId +" sent: "+dataToCompare.substring(seperatorIndex));
+		
 	}else{
 		broadcast(socket, data);
 	}
@@ -36,6 +41,7 @@ function identifySocket(socket, data)
 	//console.log("got data "+data);
 	users[name] =  socket;
 	//after identifying the socket on data for chat is enabled
+	socket.removeListener('data', identifySocket);
 	socket.on('data', function(data) {
 		receiveData(socket, data);
 	})
