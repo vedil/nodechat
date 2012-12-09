@@ -6,10 +6,14 @@ var sockets = [];
 /*
  * Callback method executed when data is received from a socket
  */
-function receiveData(data) {
+function receiveData(socket, data) {
+	data = data.toString('utf8').replace(/\r\n/, '');
 	console.log("got data "+data);
-	for(var i = 0; i<sockets.length; i++) {
-		sockets[i].write(data);
+	for(var i = 0; i < sockets.length; i++) {
+		//this is to filter out the self
+		if (sockets[i] !== socket) {
+			sockets[i].write(data);
+		}
 	}
 }
  
@@ -20,7 +24,7 @@ function newSocket(socket) {
 	sockets.push(socket);
 	socket.write('Welcome to the Telnet server!\n');
 	socket.on('data', function(data) {
-		receiveData(data);
+		receiveData(socket, data);
 	})
 }
  
