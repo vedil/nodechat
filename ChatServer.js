@@ -62,8 +62,10 @@ function onData(data)
  */
 function newSocket(socket) {
 	sockets.push(socket);
-	socket.write('Welcome to the Telnet server!\n Enter the name to identify');
+	socket.write('Welcome to the Telnet server!\n ');
+	socket.write("private message can be sent by command like this @PM userId:this is test message")
 	socket.write('no:of sockets '+sockets.length +"\n");
+	socket.write("Enter the name to identify:");
 	socket.on('data', function (data){identifySocket(socket, data);});
 	
 }
