@@ -3,3 +3,5 @@ this is problem statement
 Create a multi user chat server that users can telnet into. e.g. 192.168.2.25.8000 (similar to IRC). Bonus if you can make it P2P.
 
 //assuming that the message will be sent as @PM userId:this is test message
+
+need to debug one issue, the messages are getting increased after each send
