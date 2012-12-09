@@ -32,7 +32,7 @@ function broadcast(socket, data)
 	for(var i = 0; i < sockets.length; i++) {
 		//this is to filter out the self
 		if (sockets[i] !== socket) {
-			sockets[i].write(data);
+			sockets[i].write(socket.name+" sent: "+data);
 		}
 	}
 }
@@ -50,6 +50,8 @@ function identifySocket(socket, data)
 	socket.on('data', function(data) {
 		receiveData(socket, data);
 	})
+	
+	socket.name = name;
 }
 
 function onData(data)
