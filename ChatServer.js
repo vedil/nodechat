@@ -8,7 +8,7 @@ var users = {};
  */
 function receiveData(socket, data) {
 	var dataToCompare = data.toString('utf8').replace(/\r\n/, '');
-	console.log("got data "+dataToCompare +" users ="+users);
+	//console.log("got data "+dataToCompare +" sockets  ="+sockets.length);
 	
 	if(dataToCompare.lastIndexOf("@PM") == 0)
 	{
@@ -19,6 +19,7 @@ function receiveData(socket, data) {
 		users[userId].write("user "+userId +" sent: "+dataToCompare.substring(seperatorIndex));
 		
 	}else{
+		console.log("got data "+dataToCompare +" sockets  ="+sockets.length);
 		broadcast(socket, data);
 	}
 	
@@ -27,6 +28,7 @@ function receiveData(socket, data) {
 
 function broadcast(socket, data)
 {
+	console.log("broad casting got data "+data +" sockets  ="+sockets.length);
 	for(var i = 0; i < sockets.length; i++) {
 		//this is to filter out the self
 		if (sockets[i] !== socket) {
@@ -37,14 +39,22 @@ function broadcast(socket, data)
 
 function identifySocket(socket, data)
 {
+	console.log("socket = "+socket + " data = "+data);
 	var name = data.toString('utf8').replace(/\r\n/, '');
-	//console.log("got data "+data);
+	console.log("inside identify sock  data "+data);
 	users[name] =  socket;
 	//after identifying the socket on data for chat is enabled
-	socket.removeListener('data', identifySocket);
+	//var flag = socket.removeListener('data', onData);
+	//console.log("after removing listener "+flag);
+	socket.removeAllListeners('data');
 	socket.on('data', function(data) {
 		receiveData(socket, data);
 	})
+}
+
+function onData(data)
+{
+	identifySocket(socket, data);
 }
  
 /*
@@ -53,7 +63,8 @@ function identifySocket(socket, data)
 function newSocket(socket) {
 	sockets.push(socket);
 	socket.write('Welcome to the Telnet server!\n Enter the name to identify');
-	socket.on('data', function(data){ identifySocket(socket, data)})
+	socket.write('no:of sockets '+sockets.length +"\n");
+	socket.on('data', function (data){identifySocket(socket, data);});
 	
 }
  
